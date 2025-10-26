@@ -1,0 +1,763 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tollywood Cinema - Book Your Tickets</title>
+    <style>
+        /* Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        :root {
+            --primary: #ff5722;
+            --primary-dark: #e64a19;
+            --secondary: #311b92;
+            --accent: #ff9800;
+            --light: #f5f5f5;
+            --dark: #212121;
+            --text: #333;
+            --text-light: #777;
+        }
+        
+        body {
+            background-color: #f9f9f9;
+            color: var(--text);
+            line-height: 1.6;
+        }
+        
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+        
+        /* Header Styles */
+        header {
+            background: linear-gradient(to right, var(--secondary), var(--primary));
+            color: white;
+            padding: 15px 0;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .logo h1 {
+            font-size: 1.8rem;
+            font-weight: 700;
+        }
+        
+        .logo span {
+            color: var(--accent);
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 25px;
+        }
+        
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+            padding: 5px 10px;
+            border-radius: 4px;
+        }
+        
+        nav a:hover, nav a.active {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+        
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), 
+                        url('https://images.unsplash.com/photo-1489599809505-f2b4ef8a7c5c?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            padding: 80px 0;
+            text-align: center;
+        }
+        
+        .hero h2 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+        
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 700px;
+            margin: 0 auto 30px;
+        }
+        
+        .btn {
+            display: inline-block;
+            background-color: var(--primary);
+            color: white;
+            padding: 12px 30px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+        
+        .btn:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        /* Movies Section */
+        .section-title {
+            text-align: center;
+            margin: 50px 0 30px;
+            position: relative;
+        }
+        
+        .section-title h2 {
+            font-size: 2rem;
+            color: var(--secondary);
+            display: inline-block;
+            padding-bottom: 10px;
+        }
+        
+        .section-title h2::after {
+            content: '';
+            position: absolute;
+            width: 80px;
+            height: 3px;
+            background-color: var(--primary);
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        
+        .movies-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 30px;
+            margin-bottom: 50px;
+        }
+        
+        .movie-card {
+            background-color: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .movie-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+        }
+        
+        .movie-poster {
+            height: 350px;
+            width: 100%;
+            object-fit: cover;
+        }
+        
+        .movie-info {
+            padding: 20px;
+        }
+        
+        .movie-title {
+            font-size: 1.3rem;
+            margin-bottom: 10px;
+            color: var(--dark);
+        }
+        
+        .movie-details {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+        
+        .movie-price {
+            color: var(--primary);
+            font-weight: 700;
+            font-size: 1.2rem;
+        }
+        
+        .showtimes {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 15px;
+        }
+        
+        .time-slot {
+            background-color: var(--light);
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .time-slot:hover {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        /* Booking Form */
+        .booking-section {
+            background-color: white;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            margin-bottom: 50px;
+        }
+        
+        .booking-form {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+        
+        .form-control:focus {
+            border-color: var(--primary);
+            outline: none;
+        }
+        
+        .booking-summary {
+            background-color: var(--light);
+            padding: 25px;
+            border-radius: 8px;
+            margin-top: 20px;
+        }
+        
+        .summary-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+        
+        .total {
+            font-weight: 700;
+            font-size: 1.2rem;
+            border-top: 1px solid #ddd;
+            padding-top: 10px;
+            margin-top: 10px;
+        }
+        
+        /* Footer */
+        footer {
+            background-color: var(--dark);
+            color: white;
+            padding: 50px 0 20px;
+        }
+        
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+        
+        .footer-column h3 {
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+            position: relative;
+            padding-bottom: 10px;
+        }
+        
+        .footer-column h3::after {
+            content: '';
+            position: absolute;
+            width: 40px;
+            height: 2px;
+            background-color: var(--primary);
+            bottom: 0;
+            left: 0;
+        }
+        
+        .footer-column ul {
+            list-style: none;
+        }
+        
+        .footer-column ul li {
+            margin-bottom: 10px;
+        }
+        
+        .footer-column a {
+            color: #bbb;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        
+        .footer-column a:hover {
+            color: white;
+        }
+        
+        .social-links {
+            display: flex;
+            gap: 15px;
+            margin-top: 15px;
+        }
+        
+        .social-links a {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 36px;
+            height: 36px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            transition: background-color 0.3s;
+        }
+        
+        .social-links a:hover {
+            background-color: var(--primary);
+        }
+        
+        .copyright {
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: #bbb;
+            font-size: 0.9rem;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            nav ul {
+                gap: 15px;
+            }
+            
+            .hero h2 {
+                font-size: 2rem;
+            }
+            
+            .booking-form {
+                grid-template-columns: 1fr;
+            }
+            
+            .movies-grid {
+                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            }
+        }
+        
+        @media (max-width: 576px) {
+            .movies-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .hero {
+                padding: 50px 0;
+            }
+            
+            .booking-section {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <h1>Tolly<span>Cinema</span></h1>
+                </div>
+                <nav>
+                    <ul>
+                        <li><a href="#" class="active">Home</a></li>
+                        <li><a href="#">Movies</a></li>
+                        <li><a href="#">Theaters</a></li>
+                        <li><a href="#">Offers</a></li>
+                        <li><a href="#">Contact</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <h2>Experience the Magic of Telugu Cinema</h2>
+            <p>Book tickets for the latest blockbuster Tollywood movies. Enjoy premium cinema experience with the best sound and picture quality.</p>
+            <a href="#movies" class="btn">Book Now</a>
+        </div>
+    </section>
+
+    <!-- Movies Section -->
+    <section id="movies" class="container">
+        <div class="section-title">
+            <h2>Now Showing</h2>
+        </div>
+        
+        <div class="movies-grid">
+            <!-- Movie 1 -->
+            <div class="movie-card">
+                <img src="https://images.unsplash.com/photo-1485846234645-a62644f84728?ixlib=rb-1.2.1&auto=format&fit=crop&w=740&q=80" alt="Pushpa: The Rise" class="movie-poster">
+                <div class="movie-info">
+                    <h3 class="movie-title">Pushpa: The Rise</h3>
+                    <div class="movie-details">
+                        <span>Action, Drama</span>
+                        <span>2h 59m</span>
+                    </div>
+                    <div class="movie-price">₹220</div>
+                    <div class="showtimes">
+                        <div class="time-slot">10:00 AM</div>
+                        <div class="time-slot">1:30 PM</div>
+                        <div class="time-slot">4:45 PM</div>
+                        <div class="time-slot">8:00 PM</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Movie 2 -->
+            <div class="movie-card">
+                <img src="https://images.unsplash.com/photo-1594909122845-11baa439b7bf?ixlib=rb-1.2.1&auto=format&fit=crop&w=740&q=80" alt="RRR" class="movie-poster">
+                <div class="movie-info">
+                    <h3 class="movie-title">RRR</h3>
+                    <div class="movie-details">
+                        <span>Action, Period Drama</span>
+                        <span>3h 7m</span>
+                    </div>
+                    <div class="movie-price">₹250</div>
+                    <div class="showtimes">
+                        <div class="time-slot">9:30 AM</div>
+                        <div class="time-slot">1:00 PM</div>
+                        <div class="time-slot">4:30 PM</div>
+                        <div class="time-slot">8:15 PM</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Movie 3 -->
+            <div class="movie-card">
+                <img src="https://images.unsplash.com/photo-1536440136628-849c177e76a1?ixlib=rb-1.2.1&auto=format&fit=crop&w=740&q=80" alt="Sarkaru Vaari Paata" class="movie-poster">
+                <div class="movie-info">
+                    <h3 class="movie-title">Sarkaru Vaari Paata</h3>
+                    <div class="movie-details">
+                        <span>Action, Comedy</span>
+                        <span>2h 43m</span>
+                    </div>
+                    <div class="movie-price">₹200</div>
+                    <div class="showtimes">
+                        <div class="time-slot">11:00 AM</div>
+                        <div class="time-slot">2:30 PM</div>
+                        <div class="time-slot">6:00 PM</div>
+                        <div class="time-slot">9:30 PM</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Movie 4 -->
+            <div class="movie-card">
+                <img src="https://images.unsplash.com/photo-1574267432553-4b4628081c31?ixlib=rb-1.2.1&auto=format&fit=crop&w=740&q=80" alt="Bheemla Nayak" class="movie-poster">
+                <div class="movie-info">
+                    <h3 class="movie-title">Bheemla Nayak</h3>
+                    <div class="movie-details">
+                        <span>Action, Thriller</span>
+                        <span>2h 34m</span>
+                    </div>
+                    <div class="movie-price">₹210</div>
+                    <div class="showtimes">
+                        <div class="time-slot">10:30 AM</div>
+                        <div class="time-slot">2:00 PM</div>
+                        <div class="time-slot">5:30 PM</div>
+                        <div class="time-slot">9:00 PM</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Booking Section -->
+    <section class="container">
+        <div class="section-title">
+            <h2>Book Your Tickets</h2>
+        </div>
+        
+        <div class="booking-section">
+            <form class="booking-form" id="bookingForm">
+                <div class="form-group">
+                    <label for="movie">Select Movie</label>
+                    <select id="movie" class="form-control" required>
+                        <option value="">Choose a movie</option>
+                        <option value="pushpa">Pushpa: The Rise - ₹220</option>
+                        <option value="rrr">RRR - ₹250</option>
+                        <option value="sarkaru">Sarkaru Vaari Paata - ₹200</option>
+                        <option value="bheemla">Bheemla Nayak - ₹210</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="theater">Select Theater</label>
+                    <select id="theater" class="form-control" required>
+                        <option value="">Choose a theater</option>
+                        <option value="pvr">PVR Cinemas, Hyderabad</option>
+                        <option value="inox">INOX, Jubilee Hills</option>
+                        <option value="carnival">Carnival Cinemas, Secunderabad</option>
+                        <option value="amb">AMB Cinemas, Gachibowli</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="date">Select Date</label>
+                    <input type="date" id="date" class="form-control" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="time">Select Time</label>
+                    <select id="time" class="form-control" required>
+                        <option value="">Choose a showtime</option>
+                        <option value="morning">Morning Shows (9:00 AM - 11:59 AM)</option>
+                        <option value="afternoon">Afternoon Shows (12:00 PM - 4:59 PM)</option>
+                        <option value="evening">Evening Shows (5:00 PM - 8:59 PM)</option>
+                        <option value="night">Night Shows (9:00 PM onwards)</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="seats">Number of Seats</label>
+                    <input type="number" id="seats" class="form-control" min="1" max="10" value="1" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="name">Your Name</label>
+                    <input type="text" id="name" class="form-control" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <input type="email" id="email" class="form-control" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="phone">Phone Number</label>
+                    <input type="tel" id="phone" class="form-control" required>
+                </div>
+                
+                <div class="form-group" style="grid-column: 1 / -1;">
+                    <button type="submit" class="btn" style="width: 100%;">Proceed to Payment</button>
+                </div>
+            </form>
+            
+            <div class="booking-summary">
+                <h3>Booking Summary</h3>
+                <div class="summary-item">
+                    <span>Movie:</span>
+                    <span id="summary-movie">-</span>
+                </div>
+                <div class="summary-item">
+                    <span>Theater:</span>
+                    <span id="summary-theater">-</span>
+                </div>
+                <div class="summary-item">
+                    <span>Date & Time:</span>
+                    <span id="summary-datetime">-</span>
+                </div>
+                <div class="summary-item">
+                    <span>Number of Seats:</span>
+                    <span id="summary-seats">-</span>
+                </div>
+                <div class="summary-item total">
+                    <span>Total Amount:</span>
+                    <span id="summary-total">₹0</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>TollyCinema</h3>
+                    <p>Your premier destination for Tollywood movie tickets. Experience the magic of Telugu cinema with us.</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook-f">FB</i></a>
+                        <a href="#"><i class="fab fa-twitter">TW</i></a>
+                        <a href="#"><i class="fab fa-instagram">IG</i></a>
+                        <a href="#"><i class="fab fa-youtube">YT</i></a>
+                    </div>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a href="#">Home</a></li>
+                        <li><a href="#">Movies</a></li>
+                        <li><a href="#">Theaters</a></li>
+                        <li><a href="#">Offers</a></li>
+                        <li><a href="#">Contact</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>Contact Us</h3>
+                    <ul>
+                        <li>Address: Film Nagar, Hyderabad, Telangana</li>
+                        <li>Phone: +91 98765 43210</li>
+                        <li>Email: info@tollycinema.com</li>
+                    </ul>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>Newsletter</h3>
+                    <p>Subscribe to our newsletter for the latest movie updates and special offers.</p>
+                    <form>
+                        <input type="email" placeholder="Your email" class="form-control" style="margin-bottom: 10px;">
+                        <button type="submit" class="btn">Subscribe</button>
+                    </form>
+                </div>
+            </div>
+            
+            <div class="copyright">
+                <p>&copy; 2023 TollyCinema. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Update booking summary in real-time
+        document.addEventListener('DOMContentLoaded', function() {
+            const movieSelect = document.getElementById('movie');
+            const theaterSelect = document.getElementById('theater');
+            const dateInput = document.getElementById('date');
+            const timeSelect = document.getElementById('time');
+            const seatsInput = document.getElementById('seats');
+            
+            const summaryMovie = document.getElementById('summary-movie');
+            const summaryTheater = document.getElementById('summary-theater');
+            const summaryDatetime = document.getElementById('summary-datetime');
+            const summarySeats = document.getElementById('summary-seats');
+            const summaryTotal = document.getElementById('summary-total');
+            
+            // Set minimum date to today
+            const today = new Date().toISOString().split('T')[0];
+            dateInput.min = today;
+            
+            // Update summary when form inputs change
+            function updateSummary() {
+                // Movie
+                if (movieSelect.value) {
+                    summaryMovie.textContent = movieSelect.options[movieSelect.selectedIndex].text;
+                } else {
+                    summaryMovie.textContent = '-';
+                }
+                
+                // Theater
+                if (theaterSelect.value) {
+                    summaryTheater.textContent = theaterSelect.options[theaterSelect.selectedIndex].text;
+                } else {
+                    summaryTheater.textContent = '-';
+                }
+                
+                // Date and Time
+                let datetimeText = '-';
+                if (dateInput.value && timeSelect.value) {
+                    const date = new Date(dateInput.value);
+                    const options = { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' };
+                    datetimeText = date.toLocaleDateString('en-IN', options);
+                    
+                    if (timeSelect.value === 'morning') datetimeText += ', Morning Show';
+                    else if (timeSelect.value === 'afternoon') datetimeText += ', Afternoon Show';
+                    else if (timeSelect.value === 'evening') datetimeText += ', Evening Show';
+                    else if (timeSelect.value === 'night') datetimeText += ', Night Show';
+                }
+                summaryDatetime.textContent = datetimeText;
+                
+                // Seats
+                summarySeats.textContent = seatsInput.value;
+                
+                // Calculate total
+                let total = 0;
+                if (movieSelect.value) {
+                    const priceText = movieSelect.options[movieSelect.selectedIndex].text.split(' - ₹')[1];
+                    if (priceText) {
+                        const price = parseInt(priceText);
+                        total = price * parseInt(seatsInput.value);
+                    }
+                }
+                summaryTotal.textContent = `₹${total}`;
+            }
+            
+            // Add event listeners
+            movieSelect.addEventListener('change', updateSummary);
+            theaterSelect.addEventListener('change', updateSummary);
+            dateInput.addEventListener('change', updateSummary);
+            timeSelect.addEventListener('change', updateSummary);
+            seatsInput.addEventListener('input', updateSummary);
+            
+            // Form submission
+            document.getElementById('bookingForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                // Simple validation
+                if (!movieSelect.value || !theaterSelect.value || !dateInput.value || !timeSelect.value) {
+                    alert('Please fill in all required fields.');
+                    return;
+                }
+                
+                // In a real application, you would process the payment here
+                alert('Booking confirmed! Redirecting to payment...');
+                // Reset form
+                this.reset();
+                updateSummary();
+            });
+            
+            // Initialize summary
+            updateSummary();
+        });
+    </script>
+</body>
+</html>
