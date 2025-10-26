@@ -1,0 +1,24 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Code') {
+            steps {
+                echo 'Getting the code from Git'
+                git branch: 'main', url: 'https://github.com/kumarmanne1996/deepseek_static_html_webpage.git'
+            }
+        }
+        stage('Build') {
+            steps {
+                echo 'Building the docker image'
+                sh "docker build -t staticapp:v4 ."
+            }
+        }
+        stage('Deploy') {
+            steps {
+                echo 'RUN deploy the docker image'
+                sh "docker run  -itd --name cont2 -p 1122:80 staticapp:v4"
+            }
+        }
+    }
+}
